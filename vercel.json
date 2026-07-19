@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/main.py": { "maxDuration": 30 }
+    "api/main.py": { "maxDuration": 30,"includeFiles": "public/**" }
   },
   "rewrites": [
     { "source": "/", "destination": "/index.html" }

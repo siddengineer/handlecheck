@@ -7,7 +7,7 @@ import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse
 
 try:
     from .platforms import PLATFORMS
@@ -89,11 +89,10 @@ async def check_username(username: str):
     }
 
 
-# --- Serve the frontend (local dev only) ---------------------------------
-# On Vercel, files under public/** are served directly by the CDN and never
-# reach this function for exact-match paths (like /index.html). The "/"
-# route below just redirects there so the browser makes a second request
-# that Vercel's CDN can intercept directly.
+# --- Serve the frontend ------------------------------------------------------
+# Locally (uvicorn/vercel dev), FRONTEND_DIR exists on disk normally.
+# On Vercel, it's only present in the function bundle because vercel.json
+# explicitly includes it via "includeFiles": "public/**".
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "public"
 
 if FRONTEND_DIR.exists():
@@ -102,6 +101,7 @@ if FRONTEND_DIR.exists():
 
 @app.get("/")
 async def root():
-    if FRONTEND_DIR.exists():
-        return FileResponse(FRONTEND_DIR / "index.html")
-    return RedirectResponse(url="/index.html")
+    index_path = FRONTEND_DIR / "index.html"
+    if index_path.exists():
+        return HTMLResponse(index_path.read_text())
+    return HTMLResponse("<h1>HandleCheck</h1><p>Frontend not found.</p>", status_code=500)
