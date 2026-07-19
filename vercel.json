@@ -1,8 +1,5 @@
 {
   "functions": {
-    "api/main.py": { "maxDuration": 30,"includeFiles": "public/**" }
-  },
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" }
-  ]
+    "api/main.py": { "maxDuration": 30, "includeFiles": "public/**" }
+  }
 }
