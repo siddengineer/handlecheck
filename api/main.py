@@ -9,7 +9,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from platforms import PLATFORMS
+try:
+    from .platforms import PLATFORMS
+except ImportError:
+    from platforms import PLATFORMS
 
 app = FastAPI(title="HandleCheck API")
 
@@ -86,7 +89,10 @@ async def check_username(username: str):
     }
 
 
-# --- Serve the frontend -----------------------------------------------------
+# --- Serve the frontend (local dev only) ---------------------------------
+# On Vercel, files under public/** are served directly by the CDN and never
+# reach this function — this block only matters when running locally via
+# `uvicorn main:app` or `vercel dev`.
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "public"
 
 if FRONTEND_DIR.exists():
