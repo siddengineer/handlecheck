@@ -89,9 +89,9 @@ async def check_username(username: str):
 # --- Serve the frontend -----------------------------------------------------
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "public"
 
-app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+if FRONTEND_DIR.exists():
+    app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
-
-@app.get("/")
-async def root():
-    return FileResponse(FRONTEND_DIR / "index.html")
+    @app.get("/")
+    async def root():
+        return FileResponse(FRONTEND_DIR / "index.html")
