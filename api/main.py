@@ -89,7 +89,7 @@ async def check_username(username: str):
 # --- Serve the frontend -----------------------------------------------------
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "public"
 
-app.mount("/static", StaticFiles(directory=FRONTEND_DIR / "static"), name="static")
+app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 
 @app.get("/")
