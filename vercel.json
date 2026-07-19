@@ -1,5 +1,5 @@
 {
   "functions": {
-    "backend/main.py": { "maxDuration": 30 }
+    "api/main.py": { "maxDuration": 30 }
   }
 }
