@@ -7,7 +7,7 @@ import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 
 try:
     from .platforms import PLATFORMS
@@ -91,13 +91,17 @@ async def check_username(username: str):
 
 # --- Serve the frontend (local dev only) ---------------------------------
 # On Vercel, files under public/** are served directly by the CDN and never
-# reach this function — this block only matters when running locally via
-# `uvicorn main:app` or `vercel dev`.
+# reach this function for exact-match paths (like /index.html). The "/"
+# route below just redirects there so the browser makes a second request
+# that Vercel's CDN can intercept directly.
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "public"
 
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
-    @app.get("/")
-    async def root():
+
+@app.get("/")
+async def root():
+    if FRONTEND_DIR.exists():
         return FileResponse(FRONTEND_DIR / "index.html")
+    return RedirectResponse(url="/index.html")
