@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HandleCheck — username availability scanner</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <div class="scan-line" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="hero">
+      <div class="prompt-row">
+        <span class="prompt-glyph">$</span>
+        <span class="prompt-text">handlecheck</span>
+        <span class="cursor" aria-hidden="true"></span>
+      </div>
+      <h1>Is your handle free?</h1>
+      <p class="sub">Type an exact username. We'll ping <span id="platform-count">~26</span> platforms — social, dev, gaming, music, writing, and a few domains — and tell you what's open.</p>
+
+      <form id="scan-form" class="scan-form" autocomplete="off">
+        <div class="input-shell">
+          <span class="chevron">&gt;</span>
+          <input
+            id="username-input"
+            type="text"
+            name="username"
+            placeholder="e.g. shadowbyte"
+            maxlength="39"
+            spellcheck="false"
+            autocapitalize="none"
+            aria-label="Username to check"
+          />
+        </div>
+        <button type="submit" id="scan-btn">
+          <span class="btn-label">Scan</span>
+        </button>
+      </form>
+      <p id="form-error" class="form-error" role="alert"></p>
+    </header>
+
+    <section id="scanning-panel" class="scanning-panel hidden" aria-live="polite">
+      <div class="scan-readout">
+        <span class="dot pulse"></span>
+        <span id="scan-ticker">initializing…</span>
+      </div>
+      <div class="scan-bar"><div class="scan-bar-fill" id="scan-bar-fill"></div></div>
+    </section>
+
+    <section id="summary-bar" class="summary-bar hidden">
+      <div class="summary-username">
+        <span class="chevron">&gt;</span>
+        <span id="summary-username-text"></span>
+      </div>
+      <div class="summary-pills">
+        <div class="summary-pill available"><strong id="count-available">0</strong><span>available</span></div>
+        <div class="summary-pill taken"><strong id="count-taken">0</strong><span>taken</span></div>
+        <div class="summary-pill unknown"><strong id="count-unknown">0</strong><span>manual check</span></div>
+      </div>
+    </section>
+
+    <section id="results" class="results" aria-live="polite"></section>
+
+    <footer class="page-footer">
+      <p>Checks are best-effort: some platforms actively block automated lookups, so "unknown" means we couldn't confirm either way — click through to check by hand. No personal data is stored; each scan just requests public profile URLs.</p>
+    </footer>
+  </main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
